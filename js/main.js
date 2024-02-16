@@ -1,4 +1,32 @@
+import { DrawingMode } from "./drawingMode.js";
+
+const drawingModes = {
+  default: new DrawingMode("Default",(square, color) => square.style.backgroundColor = color),
+  erase: new DrawingMode("Erase", (square) => square.style.backgroundColor = ""),
+  random: new DrawingMode("Random Color", (square) => {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    square.style.backgroundColor = `rgb(${r},${g},${b})`;
+  }),
+};
+
+let currentDrawingMode = drawingModes.default;
+
+function updateDrawingMode(mode){
+  currentDrawingMode = drawingModes[mode];
+}
+
 const gridContainer = document.querySelector(".grid-container");
+const gridSizeBar = document.querySelector(".grid-size");
+const gridSizeText = document.querySelector(".grid-size-text");
+const colorButton = document.querySelector(".color-button");
+const colorPicker = document.querySelector(".color-picker");
+const eraseButton = document.querySelector(".erase-button");
+const randomButton = document.querySelector(".random-button");
+const resetButton = document.querySelector(".reset-button");
+
+//Flag para que solo dibuje cuando este el ratón clickado
 let isDrawing = false;
 
 function setGrid(squares){
@@ -15,30 +43,51 @@ function setGrid(squares){
   }
 }
 
-function drawGrid(){
+function enableDrawing() {
   const squares = document.querySelectorAll(".square");
-  squares.forEach(sq => {
-  sq.addEventListener("mouseover", () => {
-    if(isDrawing){
-      sq.style.backgroundColor = "black";
-    }
-  })
-}); 
+  squares.forEach((sq) => {
+    sq.addEventListener("mouseover", () => {
+      if (isDrawing) {
+        currentDrawingMode.execute(sq, colorPicker.value);
+      }
+    });
+  });
 }
 
-function drawColorGrid(){
-  const squares = document.querySelectorAll(".square");
-  squares.forEach(sq => {
-  sq.addEventListener("mouseover", () => {
-    if(isDrawing){
-      sq.style.backgroundColor = "green";
-    }
-  })
-}); 
-}
+gridSizeText.textContent = `${gridSizeBar.value}x${gridSizeBar.value}`;
 
-setGrid(24);
-drawGrid();
+gridSizeBar.addEventListener("input", () => {
+  setGrid(gridSizeBar.value);
+  gridSizeText.textContent = `${gridSizeBar.value}x${gridSizeBar.value}`;
+  enableDrawing();
+});
+
+colorButton.addEventListener("click", (e) => {
+  e.preventDefault();
+  updateDrawingMode("default");
+});
+
+colorPicker.addEventListener("change", () => {
+  updateDrawingMode("default");
+});
+
+randomButton.addEventListener("click", (e) => {
+  e.preventDefault();
+  updateDrawingMode("random");
+});
+
+eraseButton.addEventListener("click", (e) => {
+  e.preventDefault();
+  updateDrawingMode("erase");
+});
+
+resetButton.addEventListener("click", (e) => {
+  e.preventDefault();
+  gridSizeBar.value = 24;
+  setGrid(gridSizeBar.value);
+  enableDrawing();
+  gridSizeText.textContent = `${gridSizeBar.value}x${gridSizeBar.value}`;
+});
 
 gridContainer.addEventListener("mousedown", () => {
   isDrawing = true;
@@ -46,29 +95,7 @@ gridContainer.addEventListener("mousedown", () => {
 
 gridContainer.addEventListener("mouseup", () => {
   isDrawing = false;
-})
-
-const gridSizeInput = document.querySelector(".grid-size-input");
-const gridSizeButton = document.querySelector(".grid-size-button");
-
-/*gridSizeButton.addEventListener("click", (e) => {
-  e.preventDefault();
-  if(!gridSizeInput.value){
-    alert("Set a number of squares/side first");
-  }
-  setGrid(gridSizeInput.value);
-  drawGrid();
-});*/
-
-const bnw = document.querySelector(".bnw");
-const color = document.querySelector(".color-button");
-
-bnw.addEventListener("click", (e) => {
-  e.preventDefault();
-  drawGrid();
 });
 
-color.addEventListener("click", (e) => {
-  e.preventDefault();
-  drawColorGrid();
-});
+setGrid(gridSizeBar.value);
+enableDrawing();
