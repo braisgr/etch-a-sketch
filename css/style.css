@@ -1,0 +1,22 @@
+html{
+  box-sizing: border-box;
+}
+
+*,
+*::after,
+::before{
+  box-sizing: inherit;
+}
+
+.title{
+  text-align: center;
+}
+
+.grid-container{
+  width: 722px;
+  height: 722px;
+  border: 1px solid black;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto;
+}
