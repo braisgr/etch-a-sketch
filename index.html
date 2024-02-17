@@ -4,22 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Etch-a-Sketch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <h1 class="title">Etch-a-Sketch</h1>
 
-  <div class="grid-container">
+  <div class="grid-container"></div>
 
-  </div>
-  <form>
+  <form class="buttons-container">
     <label for="grid-size" class="grid-size-text"></label>
     <input type="range" name="grid-size" min="1" max="100" class="grid-size" value="24">
     <input type="color" class="color-picker">
-    <button class="color-button">Color</button>
-    <button class="random-button">Random</button>
-    <button class="erase-button">Erase</button>
-    <button class="reset-button">Reset</button>
+    <button class="default-button button button-focus">Color</button>
+    <button class="random-button button button-focus">Random</button>
+    <button class="erase-button button button-focus">Erase</button>
+    <button class="reset-button button">Reset</button>
   </form>
   
   <script src="js/main.js" type="module"></script>

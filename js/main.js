@@ -15,12 +15,18 @@ let currentDrawingMode = drawingModes.default;
 
 function updateDrawingMode(mode){
   currentDrawingMode = drawingModes[mode];
+
+  document.querySelectorAll(".button-focus").forEach(button => {
+    button.classList.remove("active");
+  });
+
+  document.querySelector(`.${mode}-button`).classList.add("active");
 }
 
 const gridContainer = document.querySelector(".grid-container");
 const gridSizeBar = document.querySelector(".grid-size");
 const gridSizeText = document.querySelector(".grid-size-text");
-const colorButton = document.querySelector(".color-button");
+const colorButton = document.querySelector(".default-button");
 const colorPicker = document.querySelector(".color-picker");
 const eraseButton = document.querySelector(".erase-button");
 const randomButton = document.querySelector(".random-button");
@@ -31,7 +37,7 @@ let isDrawing = false;
 
 function setGrid(squares){
   gridContainer.textContent = "";
-  const squareSide = 720 / squares;
+  const squareSide = 620 / squares;
 
   for(let i=0; i<squares*squares; i++){
     const square = document.createElement("div");
@@ -55,6 +61,7 @@ function enableDrawing() {
 }
 
 gridSizeText.textContent = `${gridSizeBar.value}x${gridSizeBar.value}`;
+document.querySelector(`.default-button`).classList.add("active");
 
 gridSizeBar.addEventListener("input", () => {
   setGrid(gridSizeBar.value);
