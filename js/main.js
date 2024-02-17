@@ -9,6 +9,20 @@ const drawingModes = {
     const b = Math.floor(Math.random() * 256);
     square.style.backgroundColor = `rgb(${r},${g},${b})`;
   }),
+  darker: new DrawingMode("Darken", (square, color) => {
+    let currentColor = window.getComputedStyle(square).backgroundColor;
+    if (currentColor === "rgba(0, 0, 0, 0)") {
+      currentColor = "rgb(255, 255, 255)"; // Si el cuadrado está en blanco, comienza desde blanco
+    }
+    const rgbValues = currentColor.match(/\d+/g);
+    const r = parseInt(rgbValues[0]);
+    const g = parseInt(rgbValues[1]);
+    const b = parseInt(rgbValues[2]);
+    const darkerR = Math.max(0, r - (r * 0.1)); // Reduce el valor de rojo en un 10%
+    const darkerG = Math.max(0, g - (g * 0.1)); // Reduce el valor de verde en un 10%
+    const darkerB = Math.max(0, b - (b * 0.1)); // Reduce el valor de azul en un 10%
+    square.style.backgroundColor = `rgb(${darkerR},${darkerG},${darkerB})`;
+  }),
 };
 
 let currentDrawingMode = drawingModes.default;
@@ -28,6 +42,7 @@ const gridSizeBar = document.querySelector(".grid-size");
 const gridSizeText = document.querySelector(".grid-size-text");
 const colorButton = document.querySelector(".default-button");
 const colorPicker = document.querySelector(".color-picker");
+const darkerButton = document.querySelector(".darker-button");
 const eraseButton = document.querySelector(".erase-button");
 const randomButton = document.querySelector(".random-button");
 const resetButton = document.querySelector(".reset-button");
@@ -82,6 +97,11 @@ randomButton.addEventListener("click", (e) => {
   e.preventDefault();
   updateDrawingMode("random");
 });
+
+darkerButton.addEventListener("click", (e) => {
+  e.preventDefault();
+  updateDrawingMode("darker");
+})
 
 eraseButton.addEventListener("click", (e) => {
   e.preventDefault();
